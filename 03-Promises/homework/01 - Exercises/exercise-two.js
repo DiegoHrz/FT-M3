@@ -8,7 +8,7 @@ let args = process.argv.slice(2).map(function (st) {
 
 module.exports = {
   problemAx: problemA,
-  problemBx: problemB
+  problemBx: problemB,
 };
 
 // corre cada problema dado como un argumento del command-line para procesar
@@ -28,6 +28,17 @@ function problemA() {
 
   // promise version
   // Tu código acá:
+
+  const promiseOne = exerciseUtils
+    .promisifiedReadFile("poem-two/stanza-01.txt")
+    .then((stanza1) => {
+      exerciseUtils.blue(stanza1);
+      return exerciseUtils.promisifiedReadFile("poem-two/stanza-02.txt");
+    });
+  const promiseTwo = exerciseUtils
+    .promisifiedReadFile("poem-two/stanza-02.txt")
+    .then((stanza2) => exerciseUtils.blue(stanza2));
+  Promise.all([promiseOne, promiseTwo]).finally(() => console.log("done"));
 }
 
 function problemB() {
@@ -47,6 +58,16 @@ function problemB() {
 
   // promise version
   // Tu código acá:
+
+  filenames.forEach((filename) => {
+    exerciseUtils
+      .promisifiedReadFile(filename)
+      .then((stanza1) => {
+        exerciseUtils.blue(stanza1);
+        return exerciseUtils.promisifiedReadFile("poem-two/stanza-02.txt");
+      }).catch((error) => exerciseUtils.magenta(new Error(error)))
+      .finally(() => console.log("done"));
+  });
 }
 
 // EJERCICIO EXTRA
