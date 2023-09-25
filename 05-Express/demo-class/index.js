@@ -8,17 +8,17 @@
 //   .listen(3001);
 
 //creo el server y lo ejecuto
-const server = require('express')()
+const server = require("express")();
 
-server.get('/', (req,res)=>{
-    res.send('esta ruta fue creada con express')
-})
+server.get("/", (req, res) => {
+  res.send("esta ruta fue creada con express");
+});
 
-server.get('/users/:id',(req,res)=>{
-    const { id } = req.params
-    console.log(id)
-})
+server.get("/users/:id", (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+});
 
-server.listen(3001,()=>{console.log(
-    'Server listen on port 3001'
-)})
+server.listen(3001, () => {
+  console.log("Server listen on port 3001");
+});
