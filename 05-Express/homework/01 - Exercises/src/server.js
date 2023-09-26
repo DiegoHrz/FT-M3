@@ -5,6 +5,7 @@ let publications = [];
 const server = express();
 
 server.use(express.json());
+server.use(morgan('dev'))
 
 //NO MODIFICAR EL CODIGO DE ABAJO. SE USA PARA EXPORTAR EL SERVIDOR Y CORRER LOS TESTS
 module.exports = { publications, server };
