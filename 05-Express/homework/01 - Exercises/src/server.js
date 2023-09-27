@@ -29,7 +29,7 @@ server.get("/posts", (req, res) => {
   const { author, title } = req.query;
   if (author && title) {
     const publicationsFiltered = publications.filter(
-      pub => pub.author === author && pub.title === title
+      (pub) => pub.author === author && pub.title === title
     );
     if (publicationsFiltered.length) {
       return res.status(200).json(publicationsFiltered);
@@ -44,23 +44,38 @@ server.get("/posts", (req, res) => {
 
 server.get("/posts/:author", (req, res) => {
   //no se necesita el if del author porque params no podria entrar a esta ruta si noe existiera de todos modos mientras que en query si
-  const {author} = req.params;
+  const { author } = req.params;
   if (author) {
-    const filteredPosts = publications.filter(post => post.author === author)
-    if(filteredPosts.length) return res.status(200).json(filteredPosts)
+    const filteredPosts = publications.filter((post) => post.author === author);
+    if (filteredPosts.length) return res.status(200).json(filteredPosts);
     return res
-    .status(404)
-    .json({ error: "No existe ninguna publicación del autor indicado" });
+      .status(404)
+      .json({ error: "No existe ninguna publicación del autor indicado" });
   }
-
 });
 
-server.put('/posts/:id',(req, res)=>{
-    const {title, contents} = req.body
-    if(title, contents){
-        
+server.put("/posts/:id", (req, res) => {
+  const { id } = req.params;
+  const { title, contents } = req.body;
+  if (title && contents) {
+    const filteredPosts = publications.find(
+      (post) => post.id === +id
+      //type of req.params.id is a string
+      //y el id de find es number
+    );
+    if (filteredPosts) {
+      filteredPosts.title = title;
+      filteredPosts.contents = contents;
+      //filteredPost = {...filteredPost,title, contents}
+      return res.status(200).json(filteredPosts);
     }
-})
+    return res.status(404).json({
+      error:
+        "No se recibió el id correcto necesario para modificar la publicación",
+    });
+  }
+  return res.status(404).json({error: "No se recibieron los parámetros necesarios para modificar la publicación"});
+});
 
 // server.delete('/posts/:id',(req, res)=>{
 //     const {id} = req.params
