@@ -74,12 +74,31 @@ server.put("/posts/:id", (req, res) => {
         "No se recibió el id correcto necesario para modificar la publicación",
     });
   }
-  return res.status(404).json({error: "No se recibieron los parámetros necesarios para modificar la publicación"});
+  return res.status(404).json({
+    error:
+      "No se recibieron los parámetros necesarios para modificar la publicación",
+  });
 });
 
-// server.delete('/posts/:id',(req, res)=>{
-//     const {id} = req.params
-// })
+server.delete("/posts/:id", (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    return res
+      .status(404)
+      .json({ error: "No se recibió el id de la publicación a eliminar" });
+  } else {
+    let filteredPosts = publications.filter((post) => post.id !== +id);
+    if (publications.length === filteredPosts.length) {
+      return res.status(400).json({
+        error:
+          "No se recibió el id correcto necesario para eliminar la publicación",
+      });
+    } else {
+      publications = filteredPosts;
+      return res.status(200).json({ success: true });
+    }
+  }
+});
 
 //NO MODIFICAR EL CODIGO DE ABAJO. SE USA PARA EXPORTAR EL SERVIDOR Y CORRER LOS TESTS
 module.exports = { publications, server };
